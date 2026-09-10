@@ -2,9 +2,9 @@ package com.algaworks.algashop.ordering.domain.valueobject;
 
 import java.util.Objects;
 
-public record Fullname(String firstName, String lastName) {
+public record FullName(String firstName, String lastName) {
 
-    public Fullname {
+    public FullName {
         Objects.requireNonNull(firstName);
         Objects.requireNonNull(lastName);
 

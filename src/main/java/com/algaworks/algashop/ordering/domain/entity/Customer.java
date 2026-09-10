@@ -2,19 +2,18 @@ package com.algaworks.algashop.ordering.domain.entity;
 
 import com.algaworks.algashop.ordering.domain.exception.CustomerArchivedException;
 import com.algaworks.algashop.ordering.domain.valueobject.*;
+import lombok.Builder;
 
-import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
-import static com.algaworks.algashop.ordering.domain.exception.ErrorMessages.VALIDATION_ERROR_BIRTHDATE_MUST_IN_PAST;
 import static com.algaworks.algashop.ordering.domain.exception.ErrorMessages.VALIDATION_ERROR_FULLNAME_IS_NULL;
 
 public class Customer {
     private CustomerId id;
-    private Fullname fullName;
-    private LocalDate birthDate;
+    private FullName fullName;
+    private BirthDate birthDate;
     private Email email;
     private Phone phone;
     private Document document;
@@ -23,25 +22,12 @@ public class Customer {
     private OffsetDateTime registeredAt;
     private OffsetDateTime archivedAt;
     private LoyaltyPoints loyaltyPoints;
+    private Address address;
 
-    public Customer(CustomerId id, Fullname fullName, LocalDate birthDate, Email email,
-                    Phone phone, Document document, Boolean promotionNotificationsAllowed,
-                    OffsetDateTime registeredAt) {
-        this.setId(id);
-        this.setFullName(fullName);
-        this.setBirthDate(birthDate);
-        this.setEmail(email);
-        this.setPhone(phone);
-        this.setDocument(document);
-        this.setPromotionNotificationsAllowed(promotionNotificationsAllowed);
-        this.setRegisteredAt(registeredAt);
-        this.setArchived(false);
-        this.setLoyaltyPoints(LoyaltyPoints.ZERO);
-    }
-
-    public Customer(CustomerId id, Fullname fullName, LocalDate birthDate, Email email,
-                    Phone phone, Document document, Boolean promotionNotificationsAllowed, Boolean archived,
-                    OffsetDateTime registeredAt, OffsetDateTime archivedAt, LoyaltyPoints loyaltyPoints) {
+    @Builder(builderClassName = "ExistingCustomerBuild", builderMethodName = "existing")
+    private Customer(CustomerId id, FullName fullName, BirthDate birthDate, Email email, Phone phone,
+                     Document document, Boolean promotionNotificationsAllowed, Boolean archived,
+                     OffsetDateTime registeredAt, OffsetDateTime archivedAt, LoyaltyPoints loyaltyPoints, Address address) {
         this.setId(id);
         this.setFullName(fullName);
         this.setBirthDate(birthDate);
@@ -53,6 +39,25 @@ public class Customer {
         this.setRegisteredAt(registeredAt);
         this.setArchivedAt(archivedAt);
         this.setLoyaltyPoints(loyaltyPoints);
+        this.setAddress(address);
+    }
+
+    @Builder(builderClassName = "BrandNewCustomerBuild", builderMethodName = "brandNew")
+    private static Customer createBrandNew(FullName fullName, BirthDate birthDate, Email email,
+                                           Phone phone, Document document, Boolean promotionNotificationsAllowed,
+                                           Address address) {
+        return new Customer(new CustomerId(),
+                fullName,
+                birthDate,
+                email,
+                phone,
+                document,
+                promotionNotificationsAllowed,
+                false,
+                OffsetDateTime.now(),
+                null,
+                LoyaltyPoints.ZERO,
+                address);
     }
 
     public void addLoyaltyPoints(LoyaltyPoints loyaltyPointsAdded) {
@@ -64,12 +69,15 @@ public class Customer {
         verifyIfChangeable();
         this.setArchived(true);
         this.setArchivedAt(OffsetDateTime.now());
-        this.setFullName(new Fullname("Anonymous", "Anonymous"));
+        this.setFullName(new FullName("Anonymous", "Anonymous"));
         this.setPhone(new Phone("000-000-0000"));
         this.setDocument(new Document("000-00-0000"));
         this.setEmail(new Email(UUID.randomUUID() + "@anonymous.com"));
         this.setBirthDate(null);
         this.setPromotionNotificationsAllowed(false);
+        this.setAddress(this.address().toBuilder()
+                .number("Anonymized")
+                .complement(null).build());
     }
 
     public void enablePromotionNotifications() {
@@ -82,7 +90,7 @@ public class Customer {
         this.setPromotionNotificationsAllowed(false);
     }
 
-    public void changeName(Fullname fullName) {
+    public void changeName(FullName fullName) {
         verifyIfChangeable();
         this.setFullName(fullName);
     }
@@ -97,15 +105,20 @@ public class Customer {
         this.setPhone(phone);
     }
 
+    public void changeAddress(Address address) {
+        verifyIfChangeable();
+        this.setAddress(address);
+    }
+
     public CustomerId id() {
         return id;
     }
 
-    public Fullname fullName() {
+    public FullName fullName() {
         return fullName;
     }
 
-    public LocalDate birthDate() {
+    public BirthDate birthDate() {
         return birthDate;
     }
 
@@ -141,36 +154,40 @@ public class Customer {
         return loyaltyPoints;
     }
 
+    public Address address() {
+        return address;
+    }
+
     private void setId(CustomerId id) {
         Objects.requireNonNull(id);
         this.id = id;
     }
 
-    private void setFullName(Fullname fullName) {
+    private void setFullName(FullName fullName) {
         Objects.requireNonNull(fullName, VALIDATION_ERROR_FULLNAME_IS_NULL);
         this.fullName = fullName;
     }
 
-    private void setBirthDate(LocalDate birthDate) {
+    private void setBirthDate(BirthDate birthDate) {
         if (birthDate == null) {
             this.birthDate = null;
             return;
-        }
-        if (birthDate.isAfter(LocalDate.now())) {
-            throw new IllegalArgumentException(VALIDATION_ERROR_BIRTHDATE_MUST_IN_PAST);
         }
         this.birthDate = birthDate;
     }
 
     private void setEmail(Email email) {
+        Objects.requireNonNull(email);
         this.email = email;
     }
 
     private void setPhone(Phone phone) {
+        Objects.requireNonNull(phone);
         this.phone = phone;
     }
 
     private void setDocument(Document document) {
+        Objects.requireNonNull(document);
         this.document = document;
     }
 
@@ -196,6 +213,11 @@ public class Customer {
     private void setLoyaltyPoints(LoyaltyPoints loyaltyPoints) {
         Objects.requireNonNull(loyaltyPoints);
         this.loyaltyPoints = loyaltyPoints;
+    }
+
+    private void setAddress(Address address) {
+        Objects.requireNonNull(address);
+        this.address = address;
     }
 
     private void verifyIfChangeable() {

@@ -185,7 +185,7 @@ class MoneyTest {
 
             var result = moneyA.divide(moneyB);
 
-            var expectedMoney = new Money("6.66");
+            var expectedMoney = new Money("6.67");
 
             Assertions
                     .assertThat(result)

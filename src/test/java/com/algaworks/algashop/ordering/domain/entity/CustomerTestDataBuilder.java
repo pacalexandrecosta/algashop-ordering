@@ -1,6 +1,7 @@
 package com.algaworks.algashop.ordering.domain.entity;
 
 import com.algaworks.algashop.ordering.domain.valueobject.*;
+import com.algaworks.algashop.ordering.domain.valueobject.id.CustomerId;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
@@ -12,8 +13,8 @@ public class CustomerTestDataBuilder {
 
     public static Customer.BrandNewCustomerBuild brandNewCustomer() {
         return Customer.brandNew()
-                .fullName(new FullName("John", "Doe"))
-                .birthDate(new BirthDate(LocalDate.of(1991, 7, 5)))
+                .fullName(new FullName("John","Doe"))
+                .birthDate(new BirthDate(LocalDate.of(1991, 7,5)))
                 .email(new Email("johndoe@email.com"))
                 .phone(new Phone("478-256-2604"))
                 .document(new Document("255-08-0578"))
@@ -36,8 +37,8 @@ public class CustomerTestDataBuilder {
                 .promotionNotificationsAllowed(true)
                 .archived(false)
                 .archivedAt(null)
-                .fullName(new FullName("John", "Doe"))
-                .birthDate(new BirthDate(LocalDate.of(1991, 7, 5)))
+                .fullName(new FullName("John","Doe"))
+                .birthDate(new BirthDate(LocalDate.of(1991, 7,5)))
                 .email(new Email("johndoe@email.com"))
                 .phone(new Phone("478-256-2604"))
                 .document(new Document("255-08-0578"))

@@ -25,7 +25,7 @@ class ShippingInfoTest {
     void given_null_full_name_when_creating_should_throw_exception() {
         Assertions
                 .assertThatExceptionOfType(NullPointerException.class)
-                .isThrownBy(() -> new ShippingInfo(null, validDocument, validPhone, validAddress));
+                .isThrownBy(() -> new Shipping(null, validDocument, validPhone, validAddress));
     }
 
     @Test
@@ -33,7 +33,7 @@ class ShippingInfoTest {
     void given_null_document_when_creating_should_throw_exception() {
         Assertions
                 .assertThatExceptionOfType(NullPointerException.class)
-                .isThrownBy(() -> new ShippingInfo(validFullname, null, validPhone, validAddress));
+                .isThrownBy(() -> new Shipping(validFullname, null, validPhone, validAddress));
     }
 
     @Test
@@ -41,7 +41,7 @@ class ShippingInfoTest {
     void given_null_phone_when_creating_should_throw_exception() {
         Assertions
                 .assertThatExceptionOfType(NullPointerException.class)
-                .isThrownBy(() -> new ShippingInfo(validFullname, validDocument, null, validAddress));
+                .isThrownBy(() -> new Shipping(validFullname, validDocument, null, validAddress));
     }
 
     @Test
@@ -49,7 +49,7 @@ class ShippingInfoTest {
     void given_null_address_when_creating_should_throw_exception() {
         Assertions
                 .assertThatExceptionOfType(NullPointerException.class)
-                .isThrownBy(() -> new ShippingInfo(validFullname, validDocument, validPhone, null));
+                .isThrownBy(() -> new Shipping(validFullname, validDocument, validPhone, null));
     }
 
 }

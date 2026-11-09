@@ -6,11 +6,16 @@ public record ZipCode(String value) {
 
     public ZipCode {
         Objects.requireNonNull(value);
-        if (value.isEmpty() || value.isBlank()) {
+        if (value.isBlank()) {
             throw new IllegalArgumentException();
         }
         if (value.length() != 5) {
             throw new IllegalArgumentException();
         }
+    }
+
+    @Override
+    public String toString() {
+        return value;
     }
 }

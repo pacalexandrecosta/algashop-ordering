@@ -5,23 +5,23 @@ import lombok.Builder;
 
 import java.util.Objects;
 
-@Builder(toBuilder = true)
+
 public record Address(
         String street,
-        String number,
         String complement,
         String neighborhood,
+        String number,
         String city,
         String state,
         ZipCode zipCode
 ) {
-
+    @Builder(toBuilder = true)
     public Address {
-        FieldValidations.requiresNotBlank(street);
-        FieldValidations.requiresNotBlank(neighborhood);
-        FieldValidations.requiresNotBlank(number);
-        FieldValidations.requiresNotBlank(city);
-        FieldValidations.requiresNotBlank(state);
+        FieldValidations.requiresNonBlank(street);
+        FieldValidations.requiresNonBlank(neighborhood);
+        FieldValidations.requiresNonBlank(city);
+        FieldValidations.requiresNonBlank(number);
+        FieldValidations.requiresNonBlank(state);
         Objects.requireNonNull(zipCode);
     }
 }

@@ -12,9 +12,9 @@ class CustomerTest {
     @Test
     void given_invalidEmail_whenTryCreateCustomer_shouldGenerateException() {
         Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> CustomerTestDataBuilder.brandNewCustomer()
-                        .email(new Email("invalid")).build()
-                );
+            .isThrownBy(()-> CustomerTestDataBuilder.brandNewCustomer()
+                    .email(new Email("invalid")).build()
+            );
     }
 
     @Test
@@ -22,7 +22,7 @@ class CustomerTest {
         Customer customer = CustomerTestDataBuilder.brandNewCustomer().build();
 
         Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> customer.changeEmail(new Email("invalid")));
+                .isThrownBy(()-> customer.changeEmail(new Email("invalid")));
     }
 
     @Test
@@ -32,23 +32,23 @@ class CustomerTest {
         customer.archive();
 
         Assertions.assertWith(customer,
-                c -> assertThat(c.fullName()).isEqualTo(new FullName("Anonymous", "Anonymous")),
-                c -> assertThat(c.email()).isNotEqualTo(new Email("john.doe@gmail.com")),
-                c -> assertThat(c.phone()).isEqualTo(new Phone("000-000-0000")),
-                c -> assertThat(c.document()).isEqualTo(new Document("000-00-0000")),
-                c -> assertThat(c.birthDate()).isNull(),
-                c -> assertThat(c.isPromotionNotificationsAllowed()).isFalse(),
-                c -> assertThat(c.address()).isEqualTo(
-                        Address.builder()
-                                .street("Bourbon Street")
-                                .number("Anonymized")
-                                .neighborhood("North Ville")
-                                .city("York")
-                                .state("South California")
-                                .zipCode(new ZipCode("12345"))
-                                .complement(null)
-                                .build()
-                )
+            c -> assertThat(c.fullName()).isEqualTo(new FullName("Anonymous","Anonymous")),
+            c -> assertThat(c.email()).isNotEqualTo(new Email("john.doe@gmail.com")),
+            c -> assertThat(c.phone()).isEqualTo(new Phone("000-000-0000")),
+            c -> assertThat(c.document()).isEqualTo(new Document("000-00-0000")),
+            c -> assertThat(c.birthDate()).isNull(),
+            c -> assertThat(c.isPromotionNotificationsAllowed()).isFalse(),
+            c -> assertThat(c.address()).isEqualTo(
+                    Address.builder()
+                            .street("Bourbon Street")
+                            .number("Anonymized")
+                            .neighborhood("North Ville")
+                            .city("York")
+                            .state("South California")
+                            .zipCode(new ZipCode("12345"))
+                            .complement(null)
+                            .build()
+            )
         );
 
     }
@@ -61,10 +61,10 @@ class CustomerTest {
                 .isThrownBy(customer::archive);
 
         Assertions.assertThatExceptionOfType(CustomerArchivedException.class)
-                .isThrownBy(() -> customer.changeEmail(new Email("email@gmail.com")));
+                .isThrownBy(()-> customer.changeEmail(new Email("email@gmail.com")));
 
         Assertions.assertThatExceptionOfType(CustomerArchivedException.class)
-                .isThrownBy(() -> customer.changePhone(new Phone("123-123-1111")));
+                .isThrownBy(()-> customer.changePhone(new Phone("123-123-1111")));
 
         Assertions.assertThatExceptionOfType(CustomerArchivedException.class)
                 .isThrownBy(customer::enablePromotionNotifications);
@@ -88,9 +88,9 @@ class CustomerTest {
         Customer customer = CustomerTestDataBuilder.brandNewCustomer().build();
 
         Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> customer.addLoyaltyPoints(new LoyaltyPoints(0)));
+                .isThrownBy(()-> customer.addLoyaltyPoints(new LoyaltyPoints(0)));
 
         Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> customer.addLoyaltyPoints(new LoyaltyPoints(-10)));
+                .isThrownBy(()-> customer.addLoyaltyPoints(new LoyaltyPoints(-10)));
     }
 }

@@ -3,8 +3,7 @@ package com.algaworks.algashop.ordering.domain.valueobject;
 import java.util.Objects;
 
 public record FullName(String firstName, String lastName) {
-
-    public FullName {
+    public FullName(String firstName, String lastName) {
         Objects.requireNonNull(firstName);
         Objects.requireNonNull(lastName);
 
@@ -16,9 +15,8 @@ public record FullName(String firstName, String lastName) {
             throw new IllegalArgumentException();
         }
 
-        firstName = firstName.trim();
-        lastName = lastName.trim();
-
+        this.firstName = firstName.trim();
+        this.lastName = lastName.trim();
     }
 
     @Override

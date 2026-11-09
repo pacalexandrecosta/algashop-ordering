@@ -2,13 +2,14 @@ package com.algaworks.algashop.ordering.domain.entity;
 
 import com.algaworks.algashop.ordering.domain.exception.CustomerArchivedException;
 import com.algaworks.algashop.ordering.domain.valueobject.*;
+import com.algaworks.algashop.ordering.domain.valueobject.id.CustomerId;
 import lombok.Builder;
 
 import java.time.OffsetDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
-import static com.algaworks.algashop.ordering.domain.exception.ErrorMessages.VALIDATION_ERROR_FULLNAME_IS_NULL;
+import static com.algaworks.algashop.ordering.domain.exception.ErrorMessages.*;
 
 public class Customer {
     private CustomerId id;
@@ -24,28 +25,10 @@ public class Customer {
     private LoyaltyPoints loyaltyPoints;
     private Address address;
 
-    @Builder(builderClassName = "ExistingCustomerBuild", builderMethodName = "existing")
-    private Customer(CustomerId id, FullName fullName, BirthDate birthDate, Email email, Phone phone,
-                     Document document, Boolean promotionNotificationsAllowed, Boolean archived,
-                     OffsetDateTime registeredAt, OffsetDateTime archivedAt, LoyaltyPoints loyaltyPoints, Address address) {
-        this.setId(id);
-        this.setFullName(fullName);
-        this.setBirthDate(birthDate);
-        this.setEmail(email);
-        this.setPhone(phone);
-        this.setDocument(document);
-        this.setPromotionNotificationsAllowed(promotionNotificationsAllowed);
-        this.setArchived(archived);
-        this.setRegisteredAt(registeredAt);
-        this.setArchivedAt(archivedAt);
-        this.setLoyaltyPoints(loyaltyPoints);
-        this.setAddress(address);
-    }
-
     @Builder(builderClassName = "BrandNewCustomerBuild", builderMethodName = "brandNew")
     private static Customer createBrandNew(FullName fullName, BirthDate birthDate, Email email,
-                                           Phone phone, Document document, Boolean promotionNotificationsAllowed,
-                                           Address address) {
+                                    Phone phone, Document document, Boolean promotionNotificationsAllowed,
+                                    Address address) {
         return new Customer(new CustomerId(),
                 fullName,
                 birthDate,
@@ -60,11 +43,29 @@ public class Customer {
                 address);
     }
 
+    @Builder(builderClassName = "ExistingCustomerBuild", builderMethodName = "existing")
+    private Customer(CustomerId id, FullName fullName, BirthDate birthDate, Email email, Phone phone,
+                    Document document, Boolean promotionNotificationsAllowed, Boolean archived,
+                    OffsetDateTime registeredAt, OffsetDateTime archivedAt, LoyaltyPoints loyaltyPoints, Address address) {
+        this.setId(id);
+        this.setFullName(fullName);
+        this.setBirthDate(birthDate);
+        this.setEmail(email);
+        this.setPhone(phone);
+        this.setDocument(document);
+        this.setPromotionNotificationsAllowed(promotionNotificationsAllowed);
+        this.setArchived(archived);
+        this.setRegisteredAt(registeredAt);
+        this.setArchivedAt(archivedAt);
+        this.setLoyaltyPoints(loyaltyPoints);
+        this.setAddress(address);
+    }
+    
     public void addLoyaltyPoints(LoyaltyPoints loyaltyPointsAdded) {
         verifyIfChangeable();
         this.setLoyaltyPoints(this.loyaltyPoints().add(loyaltyPointsAdded));
     }
-
+    
     public void archive() {
         verifyIfChangeable();
         this.setArchived(true);
@@ -84,22 +85,22 @@ public class Customer {
         verifyIfChangeable();
         this.setPromotionNotificationsAllowed(true);
     }
-
+    
     public void disablePromotionNotifications() {
         verifyIfChangeable();
         this.setPromotionNotificationsAllowed(false);
     }
-
+    
     public void changeName(FullName fullName) {
         verifyIfChangeable();
         this.setFullName(fullName);
     }
-
+    
     public void changeEmail(Email email) {
         verifyIfChangeable();
         this.setEmail(email);
-    }
-
+    } 
+    
     public void changePhone(Phone phone) {
         verifyIfChangeable();
         this.setPhone(phone);
